@@ -1,0 +1,4 @@
+libgotest.h
+*.o
+*.a
+test
