@@ -1,13 +1,13 @@
 CFLAGS=-I .
 LDFLAGS=-L. -lgotest -pthread
 
-all: gotest.a test
+all: test
 
-gotest.a:
-	go build -buildmode=c-archive -o libgotest.a gotest/test.go
-
-test: ctest/test.o
+test: libgotest.a ctest/test.o
 	gcc -o test $^ $(LDFLAGS)
+
+libgotest.a: gotest/test.go
+	go build -buildmode=c-archive -o libgotest.a gotest/test.go
 
 ctest/test.o: ctest/test.c
 
