@@ -1,15 +1,20 @@
 CFLAGS=-I .
 LDFLAGS=-L. -lgotest -pthread
 
+CFILES=ctest/test.c
+OBJFILES=$(CFILES:.c=.o)
+ARCFILES=libgotest.a
+GOFILES=gotest/test.go
+
 all: test
 
-test: libgotest.a ctest/test.o
-	gcc -o test $^ $(LDFLAGS)
+test: $(ARCFILES) $(OBJFILES)
+	gcc -o $@ $^ $(LDFLAGS)
 
-libgotest.a: gotest/test.go
-	go build -buildmode=c-archive -o libgotest.a gotest/test.go
+$(ARCFILES): $(GOFILES)
+	go build -buildmode=c-archive -o $@ $^
 
-ctest/test.o: ctest/test.c
+$(OBJFILES): $(CFILES)
 
 clean:
 	rm ctest/*.o libgotest.* test
